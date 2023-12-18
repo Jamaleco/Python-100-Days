@@ -34,7 +34,6 @@ class WatermarkApp(QMainWindow):
 
         self.image_path = None
 
-        # GUI components
         self.image_label = QLabel(self)
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -44,7 +43,6 @@ class WatermarkApp(QMainWindow):
         watermark_button = QPushButton("Adicionar Marca D'Água", self)
         watermark_button.clicked.connect(self.add_watermark)
 
-        # Layout
         layout = QVBoxLayout()
         layout.addWidget(self.image_label)
         layout.addWidget(select_button)
@@ -70,7 +68,6 @@ class WatermarkApp(QMainWindow):
 
     def add_watermark(self):
         if self.image_path:
-            # Pergunta ao usuário o texto da marca d'água
             watermark_dialog = WatermarkDialog(self)
             result = watermark_dialog.exec()
 
@@ -79,18 +76,15 @@ class WatermarkApp(QMainWindow):
 
                 original_image = QImage(self.image_path)
 
-                # Crie uma cópia da imagem para evitar modificar a original durante o processo de pintura
                 modified_image = QImage(original_image)
 
-                # Adiciona a marca d'água na cópia
                 font = QFont()
-                font.setPixelSize(20)  # Tamanho da fonte
+                font.setPixelSize(5) 
 
                 painter = QPainter(modified_image)
                 painter.setPen(Qt.GlobalColor.black)
                 painter.setFont(font)
 
-                # Calcula as coordenadas para a parte inferior direita
                 font_metrics = painter.fontMetrics()
                 text_rect = font_metrics.boundingRect(QRect(0, 0, 0, 0), Qt.AlignmentFlag.AlignLeft, watermark_text)
                 x = modified_image.width() - text_rect.width() - 10  # 10 pixels da borda direita
@@ -98,7 +92,6 @@ class WatermarkApp(QMainWindow):
 
                 painter.drawText(x, y, watermark_text)
 
-                # Salva a cópia da imagem com a marca d'água
                 output_path, _ = QFileDialog.getSaveFileName(self, "Salvar Imagem", "", "Imagens PNG (*.png)")
 
                 if output_path:
@@ -107,10 +100,8 @@ class WatermarkApp(QMainWindow):
                     self.image_path = output_path
                     self.display_image()
 
-                    # Mostra uma mensagem de sucesso
                     QMessageBox.information(self, "Sucesso", "Marca d'água adicionada com sucesso!")
 
-                    # Encerra o programa
                     sys.exit()
 
 
